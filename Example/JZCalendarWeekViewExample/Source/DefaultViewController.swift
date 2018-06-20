@@ -9,18 +9,76 @@
 import UIKit
 import JZCalendarWeekView
 
-class DefaultViewController: UIViewController {
+class DefaultViewController: UIViewController, WeekViewDelegate, EventUpdateDelegate {
     
-    @IBOutlet weak var calendarWeekView: DefaultWeekView!
     
-    let viewModel = DefaultViewModel()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    func updateEvents(events: [DefaultEvent]) {
+     
+        self.viewModel.events = events
         setupBasic()
         setupCalendarView()
         setupNaviBar()
+    }
+    
+    func eventPressed(event: DefaultEvent) {
+        FirstLoad = false
+        selectedEvent = event
+        performSegue(withIdentifier: "EventSetting", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "EventSetting") {
+            if let viewController = segue.destination as? EventDetailViewController {
+                viewController.event = selectedEvent
+                viewController.delegate = self
+            }
+        }
+    }
+    
+    func processJson() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        for e in AllEventsJson {
+            allEventsArr.append(Events.init(eventsJson: e))
+        }
+        
+        for e in allEventsArr {
+            let startTimeArr = e.start.components(separatedBy: ":")
+            let endTimeArr = e.start.components(separatedBy: ":")
+            let startdateComp = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current, hour: Int(startTimeArr[0]), minute: Int(startTimeArr[1]))
+            let enddateComp = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current, hour: Int(endTimeArr[0]), minute: Int(endTimeArr[1]))
+            let startDate = Calendar.current.date(from: startdateComp)
+            let endDate = Calendar.current.date(from: enddateComp)
+            
+            let firstDate = startDate?.add(component: .day, value: e.weekday)
+            let lastDate = endDate?.add(component: .day, value: e.weekday)
+            
+            newEvent = DefaultEvent(id: e.id, type: e.type, startDate: firstDate!, endDate: lastDate!, duration: e.duration)
+//            eventList.append(newEvent!)
+            viewModel.events.append(newEvent!)
+        }
+    }
+ 
+    @IBOutlet weak var calendarWeekView: DefaultWeekView!
+    
+    var FirstLoad: Bool = true
+    var updateEvents = [DefaultEvent]()
+    var selectedEvent: DefaultEvent? = nil
+    var viewModel = DefaultViewModel()
+    var newEvent: DefaultEvent? = nil
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        processJson()
+        for e in viewModel.events {
+            print(e.type, e.id, e.startDate, e.endDate)
+        }
+
+        calendarWeekView.WVdelegate = self
+        setupBasic()
+        setupCalendarView()
+        setupNaviBar()
+        
     }
     
     // Support device orientation change
@@ -38,6 +96,12 @@ class DefaultViewController: UIViewController {
             return
         }
         // Basic setup
+        viewModel.events = eventList
+        if (false) {
+            viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: eventList)
+        } else {
+            viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: viewModel.events)
+        }
         calendarWeekView.setupCalendar(numOfDays: 3,
                                        setDate: Date(),
                                        allEvents: viewModel.eventsByDate,
@@ -48,6 +112,11 @@ class DefaultViewController: UIViewController {
     
     /// For example only
     private func setupCalendarViewWithSelectedData() {
+        if (false) {
+            viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: eventList)
+        } else {
+            viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: viewModel.events)
+        }
         guard let selectedData = viewModel.currentSelectedData else { return }
         calendarWeekView.setupCalendar(numOfDays: selectedData.numOfDays,
                                        setDate: selectedData.date,
@@ -80,7 +149,7 @@ extension DefaultViewController: OptionsViewDelegate {
     private func setupNaviBar() {
         updateNaviBarTitle()
         let optionsButton = UIButton(type: .system)
-        optionsButton.setImage(#imageLiteral(resourceName: "icon_options"), for: .normal)
+        optionsButton.setImage(UIImage(named: "HumbergerIcon"), for: .normal)
         optionsButton.frame.size = CGSize(width: 25, height: 25)
         if #available(iOS 11.0, *) {
             optionsButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
@@ -88,6 +157,15 @@ extension DefaultViewController: OptionsViewDelegate {
         }
         optionsButton.addTarget(self, action: #selector(presentOptionsVC), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: optionsButton)
+        
+        let DeviceButton = UIButton(type: .system)
+        DeviceButton.setImage(UIImage(named: "DeviceIcon1"), for: .normal)
+        DeviceButton.frame.size = CGSize(width: 25, height: 25)
+        if #available(iOS 11.0, *) {
+            DeviceButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
+            DeviceButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        }
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: DeviceButton)
     }
     
     @objc func presentOptionsVC() {
@@ -138,8 +216,6 @@ extension DefaultViewController: OptionsViewDelegate {
     }
     
     private func updateNaviBarTitle() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM YYYY"
-        self.navigationItem.title = dateFormatter.string(from: calendarWeekView.initDate.add(component: .day, value: calendarWeekView.numOfDays))
+        self.navigationItem.title = "Schedule"
     }
 }

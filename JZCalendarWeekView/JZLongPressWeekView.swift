@@ -5,7 +5,6 @@
 //  Created by Jeff Zhang on 26/4/18.
 //  Copyright © 2018 Jeff Zhang. All rights reserved.
 //
-
 import UIKit
 
 public protocol JZLongPressViewDelegate: class {
@@ -250,7 +249,7 @@ open class JZLongPressWeekView: JZBaseWeekView {
     open func initLongPressView(selectedCell: UICollectionViewCell?, type: LongPressType, startDate: Date) -> UIView {
         
         let longPressView = type == .move ? longPressDataSource!.weekView(self, movingCell: selectedCell!, viewForMoveLongPressAt: startDate) :
-                                            longPressDataSource!.weekView(self, viewForAddNewLongPressAt: startDate)
+            longPressDataSource!.weekView(self, viewForAddNewLongPressAt: startDate)
         longPressView.clipsToBounds = false
         
         //timeText width will change from 00:00 - 24:00, and for each time the length will be different
@@ -319,7 +318,7 @@ open class JZLongPressWeekView: JZBaseWeekView {
         return jzCell.event.id == currentEditingInfo.event.id
     }
     
-     /*** Because of reusability, we set some cell contentViews to translucent, then when those views are reused, if you don't scroll back
+    /*** Because of reusability, we set some cell contentViews to translucent, then when those views are reused, if you don't scroll back
      the willDisplayCell will not be called, then those reused contentViews will be translucent and cannot be found */
     /// Get the current moving cells to change to alpha (crossing days will have more than one cells)
     private func getCurrentMovingCells() -> [UICollectionViewCell] {
@@ -344,7 +343,7 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
         if gestureRecognizer.state == .possible {
             // Long press on ouside margin area should not begin
             let isOutsideBeginArea = pointInSelfView.x < longPressLeftMarginX || pointInSelfView.x > longPressRightMarginX ||
-                                     pointInSelfView.y < longPressTopMarginY || pointInSelfView.y > longPressBottomMarginY
+                pointInSelfView.y < longPressTopMarginY || pointInSelfView.y > longPressBottomMarginY
             if isOutsideBeginArea { return false  }
         }
         // Long press should not begin if no events at long press position and addNew not required
@@ -390,7 +389,7 @@ extension JZLongPressWeekView: UIGestureRecognizerDelegate {
             
             currentEditingInfo.cellSize = currentLongPressType == .move ? currentMovingCell.frame.size : CGSize(width: flowLayout.sectionWidth, height: flowLayout.hourHeight * CGFloat(addNewDurationMins/60))
             pressPosition = currentLongPressType == .move ? (pointInCollectionView.x - currentMovingCell.frame.origin.x, pointInCollectionView.y - currentMovingCell.frame.origin.y) :
-                                                            (currentEditingInfo.cellSize.width/2, currentEditingInfo.cellSize.height/2)
+                (currentEditingInfo.cellSize.width/2, currentEditingInfo.cellSize.height/2)
             longPressViewStartDate = getLongPressViewStartDate(pointInCollectionView: pointInCollectionView, pointInSelfView: pointInSelfView)
             longPressView = initLongPressView(selectedCell: currentMovingCell, type: currentLongPressType, startDate: longPressViewStartDate)
             longPressView.frame.size = currentEditingInfo.cellSize

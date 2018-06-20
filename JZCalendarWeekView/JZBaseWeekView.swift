@@ -504,6 +504,10 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
 }
 
 extension JZBaseWeekView: WeekViewFlowLayoutDelegate {
+    public func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, cellTypeForItemAtIndexPath indexPath: IndexPath) {
+        
+    }
+    
     
     public func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, dayForSection section: Int) -> Date {
         let date = Calendar.current.date(byAdding: .day, value: section, to: initDate)

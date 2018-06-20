@@ -39,6 +39,7 @@ class CustomWeekView: JZBaseWeekView {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedEvent = getCurrentEvent(with: indexPath) as! DefaultEvent
-        ToastUtil.toastMessageInTheMiddle(message: selectedEvent.title)
+//        SettingEvent.showSettingView(event: selectedEvent)
+        ToastUtil.toastMessageInTheMiddle(message: selectedEvent.type)
     }
 }

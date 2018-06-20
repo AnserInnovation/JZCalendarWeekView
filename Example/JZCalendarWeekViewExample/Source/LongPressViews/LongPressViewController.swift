@@ -5,12 +5,11 @@
 //  Created by Jeff Zhang on 30/4/18.
 //  Copyright © 2018 Jeff Zhang. All rights reserved.
 //
-
 import UIKit
 import JZCalendarWeekView
 
 class LongPressViewController: UIViewController {
-        
+    
     @IBOutlet weak var calendarWeekView: JZLongPressWeekView!
     let viewModel = AllDayViewModel()
     
@@ -78,7 +77,7 @@ extension LongPressViewController: JZLongPressViewDelegate, JZLongPressViewDataS
     
     func weekView(_ weekView: JZLongPressWeekView, didEndAddNewLongPressAt startDate: Date) {
         let newEvent = AllDayEvent(id: UUID().uuidString, title: "New Event", startDate: startDate, endDate: startDate.add(component: .hour, value: weekView.addNewDurationMins/60),
-                             location: "Melbourne", isAllDay: false)
+                                   location: "Melbourne", isAllDay: false)
         
         if viewModel.eventsByDate[startDate.startOfDay] == nil {
             viewModel.eventsByDate[startDate.startOfDay] = [AllDayEvent]()
@@ -179,5 +178,3 @@ extension LongPressViewController: OptionsViewDelegate {
         self.navigationItem.title = dateFormatter.string(from: calendarWeekView.initDate.add(component: .day, value: calendarWeekView.numOfDays))
     }
 }
-
-

@@ -9,6 +9,17 @@
 import UIKit
 import JZCalendarWeekView
 
+extension UIViewController {
+    func goBack () {
+        DispatchQueue.main.async {
+            if let controller = self.navigationController {
+                controller.popViewController(animated: true)
+            }
+        }
+    }
+}
+
+
 extension Date {
     
     func add(component: Calendar.Component, value: Int) -> Date {
@@ -57,6 +68,8 @@ extension JZHourGridDivision {
         }
     }
 }
+
+
 
 extension DayOfWeek {
     var dayName: String {

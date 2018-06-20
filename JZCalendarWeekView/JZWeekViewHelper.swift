@@ -63,10 +63,13 @@ open class JZWeekViewHelper {
      - Returns:
         A dictionary used by JZBaseWeekView. Key is a day Date, value is all the events in that day
      */
+    
+    //TODO Change the key to weekday.
     open class func getIntraEventsByDate<T: JZBaseEvent>(originalEvents: [T]) -> [Date: [T]] {
         var resultEvents = [Date: [T]]()
         for event in originalEvents {
             let startDateStartDay = event.startDate.startOfDay
+            print("Check start of day ", startDateStartDay)
             // get days from both startOfDay, otherwise 22:00 - 01:00 case will get 0 daysBetween result
             let daysBetween = Date.daysBetween(start: startDateStartDay, end: event.endDate, ignoreHours: true)
             if daysBetween == 0 {
@@ -91,6 +94,7 @@ open class JZWeekViewHelper {
                         newEvent.intraStartDate = currentStartDate.startOfDay
                         newEvent.intraEndDate = currentStartDate.endOfDay
                     }
+                    
                     resultEvents[currentStartDate]!.append(newEvent)
                 }
             }

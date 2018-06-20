@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ciV-hx-0O7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ciV-hx-0O7">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -83,11 +83,12 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="calendarWeekView" destination="Ahy-zm-E7y" id="zCz-co-pkP"/>
+                        <segue destination="s4M-GU-CY7" kind="show" identifier="EventSetting" id="aBS-1w-TMv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q9E-bu-glC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="719" y="123"/>
+            <point key="canvasLocation" x="718" y="129"/>
         </scene>
         <!--Long Press View Controller-->
         <scene sceneID="EJY-G0-zmD">
@@ -120,6 +121,93 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Guo-t0-ufM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="717.60000000000002" y="805.54722638680664"/>
+        </scene>
+        <!--Event Detail View Controller-->
+        <scene sceneID="Sqi-e8-tQf">
+            <objects>
+                <viewController id="s4M-GU-CY7" customClass="EventDetailViewController" customModule="JZCalendarWeekViewExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pDL-X7-EIT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NZv-VN-RQS">
+                                <rect key="frame" x="22" y="100" width="42" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="41" id="h7w-YU-OP7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="LEO-VF-Zxt" userLabel="Start Picker">
+                                <rect key="frame" x="28" y="295" width="320" height="100"/>
+                                <date key="date" timeIntervalSinceReferenceDate="551025970.12680495">
+                                    <!--2018-06-18 14:46:10 +0000-->
+                                </date>
+                                <connections>
+                                    <action selector="StartTimePicker:" destination="s4M-GU-CY7" eventType="valueChanged" id="hdy-az-UNn"/>
+                                </connections>
+                            </datePicker>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="McX-Sm-CKa" userLabel="End Picker">
+                                <rect key="frame" x="27" y="435" width="320" height="100"/>
+                                <date key="date" timeIntervalSinceReferenceDate="551025970.12680495">
+                                    <!--2018-06-18 14:46:10 +0000-->
+                                </date>
+                                <connections>
+                                    <action selector="EndTimePicker:" destination="s4M-GU-CY7" eventType="valueChanged" id="UD6-ac-B8s"/>
+                                </connections>
+                            </datePicker>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ycI-Zq-XSm">
+                                <rect key="frame" x="28" y="165" width="320" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="dKt-F2-acw"/>
+                                </constraints>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k1k-H9-cCJ">
+                                <rect key="frame" x="92" y="585" width="191" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="191" id="NBR-51-wCs"/>
+                                    <constraint firstAttribute="height" constant="40" id="um0-5W-R5c"/>
+                                </constraints>
+                                <state key="normal" title="Confirm"/>
+                                <connections>
+                                    <action selector="GoBackToWeeView:" destination="s4M-GU-CY7" eventType="touchUpInside" id="DWG-NQ-kkq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="McX-Sm-CKa" firstAttribute="top" secondItem="LEO-VF-Zxt" secondAttribute="bottom" constant="40" id="1eP-nO-NKG"/>
+                            <constraint firstItem="LEO-VF-Zxt" firstAttribute="width" secondItem="ycI-Zq-XSm" secondAttribute="width" id="5ga-g0-lEi"/>
+                            <constraint firstItem="NZv-VN-RQS" firstAttribute="leading" secondItem="gIU-o0-bCj" secondAttribute="leading" constant="22" id="Agk-81-Ty6"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="NZv-VN-RQS" secondAttribute="trailing" constant="20" symbolic="YES" id="EEC-GW-hAd"/>
+                            <constraint firstItem="LEO-VF-Zxt" firstAttribute="leading" secondItem="ycI-Zq-XSm" secondAttribute="leading" id="Fbf-ZA-cf2"/>
+                            <constraint firstItem="ycI-Zq-XSm" firstAttribute="top" secondItem="NZv-VN-RQS" secondAttribute="bottom" constant="24" id="JyV-vo-sal"/>
+                            <constraint firstItem="LEO-VF-Zxt" firstAttribute="height" secondItem="ycI-Zq-XSm" secondAttribute="height" id="c6w-SQ-v3k"/>
+                            <constraint firstItem="gIU-o0-bCj" firstAttribute="trailing" secondItem="ycI-Zq-XSm" secondAttribute="trailing" constant="27.5" id="d08-Hi-3eQ"/>
+                            <constraint firstItem="LEO-VF-Zxt" firstAttribute="top" secondItem="ycI-Zq-XSm" secondAttribute="bottom" constant="30" id="f6D-eV-YRP"/>
+                            <constraint firstItem="McX-Sm-CKa" firstAttribute="centerX" secondItem="k1k-H9-cCJ" secondAttribute="centerX" id="foK-U8-Mm2"/>
+                            <constraint firstItem="gIU-o0-bCj" firstAttribute="trailing" secondItem="k1k-H9-cCJ" secondAttribute="trailing" constant="92" id="jED-hJ-wmq"/>
+                            <constraint firstItem="ycI-Zq-XSm" firstAttribute="leading" secondItem="gIU-o0-bCj" secondAttribute="leading" constant="27.5" id="kE3-QT-ldt"/>
+                            <constraint firstItem="gIU-o0-bCj" firstAttribute="bottom" secondItem="k1k-H9-cCJ" secondAttribute="bottom" constant="42" id="n86-yW-jOt"/>
+                            <constraint firstItem="NZv-VN-RQS" firstAttribute="top" secondItem="gIU-o0-bCj" secondAttribute="top" constant="36" id="oIx-AH-mKS"/>
+                            <constraint firstItem="McX-Sm-CKa" firstAttribute="height" secondItem="LEO-VF-Zxt" secondAttribute="height" id="rRh-dc-Hjk"/>
+                            <constraint firstItem="ycI-Zq-XSm" firstAttribute="centerX" secondItem="pDL-X7-EIT" secondAttribute="centerX" id="xmN-KK-T3d"/>
+                            <constraint firstItem="McX-Sm-CKa" firstAttribute="width" secondItem="LEO-VF-Zxt" secondAttribute="width" id="zEZ-pN-QDG"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gIU-o0-bCj"/>
+                    </view>
+                    <connections>
+                        <outlet property="ConfirmButton" destination="k1k-H9-cCJ" id="4xy-bU-NFf"/>
+                        <outlet property="EndPickerView" destination="McX-Sm-CKa" id="a6G-Fh-rZo"/>
+                        <outlet property="StartPickerView" destination="LEO-VF-Zxt" id="mUg-uJ-XSK"/>
+                        <outlet property="TypePickerView" destination="ycI-Zq-XSm" id="I3Q-1T-25O"/>
+                        <outlet property="WeekdayLabel" destination="NZv-VN-RQS" id="ogj-6f-1Ng"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="w26-pa-2Ts" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1460" y="829.83508245877067"/>
         </scene>
         <!--Example Options View Controller-->
         <scene sceneID="A1o-p0-qFd">

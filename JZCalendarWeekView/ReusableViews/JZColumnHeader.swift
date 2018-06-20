@@ -34,14 +34,14 @@ open class JZColumnHeader: UICollectionReusableView {
         stackView.setAnchorConstraintsEqualTo(centerXAnchor: centerXAnchor, centerYAnchor: centerYAnchor)
         lblDay.textAlignment = .center
         lblWeekday.textAlignment = .center
-        lblDay.font = UIFont.systemFont(ofSize: 17)
+        lblDay.font = UIFont.systemFont(ofSize: 2)
         lblWeekday.font = UIFont.systemFont(ofSize: 12)
     }
     
     public func updateView(date: Date) {
         let weekday = calendarCurrent.component(.weekday, from: date) - 1
         
-        lblDay.text = String(calendarCurrent.component(.day, from: date))
+//        lblDay.text = String(calendarCurrent.component(.day, from: date))
         lblWeekday.text = dateFormatter.shortWeekdaySymbols[weekday].uppercased()
         
         if date.isToday {

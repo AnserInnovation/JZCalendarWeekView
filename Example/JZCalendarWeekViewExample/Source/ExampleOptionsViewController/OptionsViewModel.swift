@@ -94,7 +94,8 @@ class OptionsViewModel: NSObject {
         return [
             ExpandableData(subject: .viewType, categories: viewTypeCategories),
             ExpandableData(subject: .currentDate),
-            ExpandableData(subject: .numOfDays, categories: Array(1...10)),
+            // Set the days can show in calendar in one time
+            ExpandableData(subject: .numOfDays, categories: [1, 3]),
             ExpandableData(subject: .scrollType, categories: [JZScrollType.pageScroll, JZScrollType.sectionScroll]),
             ExpandableData(subject: .hourGridDivision, categories: hourDivisionCategories)
         ]
