@@ -124,11 +124,12 @@ open class JZBaseWeekView: UIView {
                             scrollType: JZScrollType = .pageScroll,
                             firstDayOfWeek:DayOfWeek? = nil) {
         
-        self.numOfDays = numOfDays
+        self.numOfDays = 1
         if numOfDays == 7 {
             updateFirstDayOfWeek(setDate: setDate, firstDayOfWeek: firstDayOfWeek ?? .sunday)
         } else {
-            self.initDate = setDate.startOfDay.add(component: .day, value: -numOfDays)
+            self.initDate = setDate
+            print("setDate: ", self.initDate)
         }
         self.allEventsBySection = allEvents
         self.scrollType = scrollType
@@ -229,10 +230,21 @@ open class JZBaseWeekView: UIView {
             dates.append(startDate)
             startDate = startDate.add(component: .day, value: 1)
         } while startDate <= endDate
-       
+
         return dates
+        
     }
     
+    open func getDateInCurrentPage(isScrolling: Bool) -> Date {
+        var date = getDatesInCurrentPage(isScrolling: isScrolling)[0]
+        if (getDatesInCurrentPage(isScrolling: isScrolling).count == 2) {
+            if (getScrollDirection() == .right) {
+                date = getDatesInCurrentPage(isScrolling: isScrolling)[1]
+            }
+        }
+        return date
+    }
+
     /**
         Used to Refresh the weekView when viewWillTransition
      
@@ -384,9 +396,13 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     open func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
         if scrollDirectionAxis == .vertical { return }
+
         targetContentOffset.pointee = scrollView.contentOffset
+        
         pagingEffect(scrollView: scrollView, velocity: velocity)
+
     }
     
     // end dragging for loading drag to the leftmost and rightmost should load page
@@ -395,7 +411,9 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
         let isDraggedToEdge = scrollView.contentOffset.x == 0 || scrollView.contentOffset.x == contentViewWidth * 2
         guard scrollDirectionAxis != .vertical && isDraggedToEdge else { return }
         if !decelerate { isDirectionLocked = false }
+        
         loadPage(scrollView)
+        
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -428,7 +446,6 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         var lockedDirection: ScrollDirection!
-        
         if !isDirectionLocked {
             let isScrollingHorizontally = abs(scrollView.contentOffset.x - initialContentOffset.x) > abs(scrollView.contentOffset.y - initialContentOffset.y)
             lockedDirection = isScrollingHorizontally ? .vertical : .horizontal
@@ -465,6 +482,7 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
             let isVelocitySatisfied = abs(velocity.x) > 0.2
             // scroll a whole page
             if scrollXDistance >= 0 {
+                
                 if scrollXDistance >= scrollProportion * contentViewWidth || isVelocitySatisfied {
                     scrollView.setContentOffset(CGPoint(x:initialContentOffset.x-contentViewWidth,y:yCurrentOffset), animated: true)
                 }else{
@@ -476,6 +494,7 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
                 } else {
                     scrollView.setContentOffset(initialContentOffset, animated: true)
                 }
+                
             }
         }
     }
@@ -484,7 +503,6 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
     private func loadPage(_ scrollView: UIScrollView) {
         let maximumOffset = scrollView.contentSize.width - scrollView.frame.width
         let currentOffset = scrollView.contentOffset.x
-    
         if maximumOffset <= currentOffset {
             //load next page
             loadNextOrPrevPage(isNext: true)
@@ -498,8 +516,23 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
     ///Can be overrided to do some operations before reload
     open func loadNextOrPrevPage(isNext: Bool) {
         let addValue = isNext ? numOfDays : -numOfDays
+        var dateComponents = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current, year: 2018, month: 6, day: 17)
+        let satDate = Calendar.current.date(from: dateComponents)
+        dateComponents = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current, year: 2018, month: 6, day: 23)
+        let sunDate = Calendar.current.date(from: dateComponents)
+     
         self.initDate = self.initDate.add(component: .day, value: addValue!)
+
+        let curday = Calendar.current.component(.day, from: self.initDate)
+        if (curday == 24) {
+            self.initDate = satDate
+        } else if (curday == 16) {
+            self.initDate = sunDate
+        }
         self.forceReload()
+        
+        let weekday = Calendar.current.component(.weekday, from: self.initDate)
+         print("Current page: ", self.initDate, weekday)
     }
 }
 

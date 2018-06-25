@@ -39,9 +39,15 @@ open class JZColumnHeader: UICollectionReusableView {
     }
     
     public func updateView(date: Date) {
-        let weekday = calendarCurrent.component(.weekday, from: date) - 1
+        var weekday = calendarCurrent.component(.weekday, from: date) - 2
         
 //        lblDay.text = String(calendarCurrent.component(.day, from: date))
+        if (weekday == -1) {
+            weekday = 6
+        } else if (weekday == 7){
+            weekday = 0
+        }
+        print("update view: ", weekday, date)
         lblWeekday.text = dateFormatter.shortWeekdaySymbols[weekday].uppercased()
         
         if date.isToday {

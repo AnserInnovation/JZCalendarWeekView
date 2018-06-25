@@ -19,6 +19,27 @@ public protocol WeekViewFlowLayoutDelegate: class {
     func collectionView(_ collectionView: UICollectionView, layout: JZWeekViewFlowLayout, cellTypeForItemAtIndexPath indexPath: IndexPath)
 }
 
+func magicChangesDate(date: Date) -> Date {
+    let weekday = Calendar.current.component(.weekday, from: date)
+    var dateComponents = DateComponents()
+    if weekday == 1 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 17)
+    } else if weekday == 2 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 18)
+    } else if weekday == 3 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 19)
+    } else if weekday == 4 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 20)
+    } else if weekday == 5 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 21)
+    } else if weekday == 6 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 22)
+    } else if weekday == 7 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 23)
+    }
+    return Calendar.current.date(from: dateComponents)!
+}
+
 open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     // UI params
@@ -58,7 +79,7 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     var currentTimeComponents: DateComponents {
         if cachedCurrentTimeComponents[0] == nil {
-            cachedCurrentTimeComponents[0] = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+            cachedCurrentTimeComponents[0] = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: magicChangesDate(date: Date()))
         }
         return cachedCurrentTimeComponents[0]!
     }
@@ -299,7 +320,6 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     func layoutItemsAttributes(section: Int, sectionX: CGFloat, calendarStartY: CGFloat) {
         var attributes =  UICollectionViewLayoutAttributes()
         var sectionItemAttributes = [UICollectionViewLayoutAttributes]()
-        
         for item in 0..<collectionView!.numberOfItems(inSection: section) {
             let itemIndexPath = IndexPath(item: item, section: section)
             (attributes, itemAttributes) = layoutAttributesForCell(at: itemIndexPath, withItemCache: itemAttributes)
@@ -333,7 +353,6 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     func layoutVerticalGridLinesAttributes(section: Int, sectionX: CGFloat, calendarGridMinY: CGFloat, sectionHeight: CGFloat) {
         var attributes = UICollectionViewLayoutAttributes()
-        
         (attributes, verticalGridlineAttributes) = layoutAttributesForDecorationView(at: IndexPath(item: 0, section: section),
                                                                                      ofKind: JZDecorationViewKinds.verticalGridline,
                                                                                      withItemCache: verticalGridlineAttributes)

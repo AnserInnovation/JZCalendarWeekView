@@ -47,17 +47,19 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
         
         
         dateFormatter.timeZone = TimeZone(abbreviation: "CDT")
-        let weekday = calendarCurrent.component(.weekday, from: (event?.startDate)!) - 1
-        WeekdayLabel.text = dateFormatter.weekdaySymbols[weekday].uppercased()
+        let weekday = calendarCurrent.component(.weekday, from: (event?.startDate)!)
+        
+        // Caution problem next line !!! ---------------------------------------
+        WeekdayLabel.text = dateFormatter.weekdaySymbols[weekday - 2].uppercased()
         startTime = (event?.startDate)!
         endTime = (event?.endDate)!
         self.StartPickerView.setDate(startTime, animated: true)
         self.EndPickerView.setDate(endTime, animated: true)
         newType = (event?.type)!
         var count = 0
-        for e in AllEvents {
-            if (e.type == event?.type) {
-                print(e.type, count)
+        for s in allEventTypes {
+            if (s == event?.type) {
+                print(s, count)
                 break
             }
             count += 1
@@ -66,6 +68,7 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
         self.TypePickerView.reloadAllComponents()
 
         eventList = AllEvents
+        eventList.append(contentsOf: NeweventList)
     }
     
     
@@ -75,11 +78,11 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return AllEvents.count
+        return allEventTypes.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return AllEvents[row].type
+        return allEventTypes[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -124,38 +127,28 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     @IBAction func GoBackToWeeView(_ sender: Any) {
 //        endTime = HandleCrossDayEvent(start: startTime, end: endTime)
-        updateSettingEvent(events: eventList, NeweventType: AllEvents[index].type, startDate: startTime, endDate: endTime)
-        
-        for e in eventList {
-            print(e.startDate, e.type, e.endDate)
-        }
+        updateSettingEvent(events: eventList, NeweventType: allEventTypes[index], startDate: startTime, endDate: endTime)
         self.goBack()
     }
     @IBAction func StartTimePicker(_ sender: UIDatePicker) {
         let componenets = Calendar.current.dateComponents([.hour, .minute], from: sender.date)
         if let minute = componenets.minute, let hour = componenets.hour {
             
-            print("start: ", calendarCurrent.component(.hour, from: (event?.startDate)!), hour)
-            
             // Calculate the offset of eventcell
             let firstDate = (event?.startDate)!.add(component: .hour, value: hour - calendarCurrent.component(.hour, from: (event?.startDate)!)).add(component: .minute, value: minute - calendarCurrent.component(.minute, from: (event?.startDate)!))
 //            let conv = dateFormatter.date(from: String(firstDate))
             startTime = firstDate
             startString = String(hour) + ":" + String(minute)
-            print(startString)
         }
     }
     @IBAction func EndTimePicker(_ sender: UIDatePicker) {
         let componenets = Calendar.current.dateComponents([.hour, .minute], from: sender.date)
         
         if let minute = componenets.minute, let hour = componenets.hour {
-            print("end: ", calendarCurrent.component(.hour, from: (event?.endDate)!), hour)
             let secDate = (event?.endDate)!.add(component: .hour, value: hour - calendarCurrent.component(.hour, from: (event?.endDate)!)).add(component: .minute, value: minute - calendarCurrent.component(.minute, from: (event?.endDate)!))
-//            let conv =
             endTime = secDate
             print("EndDate: ", endTime)
             endString = String(hour) + ":" + String(minute)
-            print(endString)
         }
     }
 }

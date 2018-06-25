@@ -29,7 +29,51 @@ extension Date {
     var startOfDay: Date {
         return Calendar.current.startOfDay(for: self)
     }
+    
 }
+
+func matchWeekDayToDate(weekday: Int) -> Date {
+    var dateComponents = DateComponents()
+    if weekday == 1 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 17)
+    } else if weekday == 2 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 18)
+    } else if weekday == 3 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 19)
+    } else if weekday == 4 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 20)
+    } else if weekday == 5 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 21)
+    } else if weekday == 6 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 22)
+    } else if weekday == 7 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 23)
+    }
+    return Calendar.current.date(from: dateComponents)!
+}
+
+func magicChangesDate(date: Date) -> Date {
+    let weekday = Calendar.current.component(.weekday, from: date)
+    var dateComponents = DateComponents()
+    if weekday == 1 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 17)
+    } else if weekday == 2 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 18)
+    } else if weekday == 3 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 19)
+    } else if weekday == 4 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 20)
+    } else if weekday == 5 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 21)
+    } else if weekday == 6 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 22)
+    } else if weekday == 7 {
+        dateComponents = DateComponents(calendar: Calendar.current, year: 2018, month: 6, day: 23)
+    }
+    return Calendar.current.date(from: dateComponents)!
+}
+
+
 
 extension UIColor {
     

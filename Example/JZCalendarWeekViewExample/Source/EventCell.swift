@@ -32,14 +32,9 @@ class EventCell: UICollectionViewCell {
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         self.backgroundColor = UIColor(hex: 0xEEF7FF)
         borderView.backgroundColor = UIColor(hex: 0x0899FF)
-//        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(EventTapped)))
     }
     
-//    @IBAction func EventTapped(_ gestureRecognizer : UITapGestureRecognizer ) {
-//        print("Taaaaaaapppppppppped     ", event.type, event.delegate.debugDescription)
-//        self.addSubview(settingEventView)
-//    }
-    
+
     func calculateTimeDifference(start: Date, end: Date) -> Int {
         let difference = end.timeIntervalSince(start)
         return (Int(difference / 60))
