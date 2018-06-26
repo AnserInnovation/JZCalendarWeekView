@@ -129,7 +129,6 @@ open class JZBaseWeekView: UIView {
             updateFirstDayOfWeek(setDate: setDate, firstDayOfWeek: firstDayOfWeek ?? .sunday)
         } else {
             self.initDate = setDate
-            print("setDate: ", self.initDate)
         }
         self.allEventsBySection = allEvents
         self.scrollType = scrollType
@@ -532,7 +531,6 @@ extension JZBaseWeekView: UICollectionViewDelegate, UICollectionViewDataSource {
         self.forceReload()
         
         let weekday = Calendar.current.component(.weekday, from: self.initDate)
-         print("Current page: ", self.initDate, weekday)
     }
 }
 

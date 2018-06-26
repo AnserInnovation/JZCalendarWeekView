@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EventUpdateDelegate: class {
-    func updateEvents(events: [DefaultEvent])
+    func updateEvents(events: [DefaultEvent], date: Date)
 }
 
 class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
@@ -59,7 +59,6 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
         var count = 0
         for s in allEventTypes {
             if (s == event?.type) {
-                print(s, count)
                 break
             }
             count += 1
@@ -111,7 +110,7 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
                 continue
             }
         }
-        delegate?.updateEvents(events: eventList)
+        delegate?.updateEvents(events: eventList, date: startDate)
     }
     
 
@@ -147,7 +146,6 @@ class EventDetailViewController: UIViewController, UIPickerViewDelegate, UIPicke
         if let minute = componenets.minute, let hour = componenets.hour {
             let secDate = (event?.endDate)!.add(component: .hour, value: hour - calendarCurrent.component(.hour, from: (event?.endDate)!)).add(component: .minute, value: minute - calendarCurrent.component(.minute, from: (event?.endDate)!))
             endTime = secDate
-            print("EndDate: ", endTime)
             endString = String(hour) + ":" + String(minute)
         }
     }

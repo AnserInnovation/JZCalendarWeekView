@@ -12,11 +12,11 @@ import JZCalendarWeekView
 class DefaultViewController: UIViewController, WeekViewDelegate, EventUpdateDelegate {
     
     
-    func updateEvents(events: [DefaultEvent]) {
+    func updateEvents(events: [DefaultEvent], date: Date) {
      
         self.viewModel.events = events
         setupBasic()
-        setupCalendarView()
+        setupCalendarView(date: date)
         setupNaviBar()
     }
     
@@ -59,15 +59,8 @@ class DefaultViewController: UIViewController, WeekViewDelegate, EventUpdateDele
             let lastDate = endDate?.add(component: .day, value: 1)
             
             newEvent = DefaultEvent(id: e.id, type: e.type, startDate: firstDate!, endDate: lastDate!, duration: e.duration)
-            print("TTTTTTTTTTT   ", newEvent?.type, newEvent?.startDate )
             NeweventList.append(newEvent!)
             viewModel.events.append(newEvent!)
-        }
-        for e in NeweventList {
-            print("example test", e.type, e.startDate)
-        }
-        for e in viewModel.events {
-            print("example test", e.type, e.startDate)
         }
     }
  
@@ -83,12 +76,12 @@ class DefaultViewController: UIViewController, WeekViewDelegate, EventUpdateDele
         super.viewDidLoad()
         processJson()
         calendarWeekView.WVdelegate = self
-        // After this method then eventsbyDate did not change so view did not update.
-        // TODO!!!
+  
         viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: eventList)
         
         setupBasic()
-        setupCalendarView()
+        setupCalendarView(date: Date())
+
         setupNaviBar()
         
     }
@@ -98,16 +91,17 @@ class DefaultViewController: UIViewController, WeekViewDelegate, EventUpdateDele
         JZWeekViewHelper.viewTransitionHandler(to: size, weekView: calendarWeekView)
     }
     
-    private func setupCalendarView() {
-        let weekday = Calendar.current.component(.weekday, from: Date())
+    private func setupCalendarView(date: Date) {
+        let weekday = Calendar.current.component(.weekday, from: date)
         let curdate = matchWeekDayToDate(weekday: weekday)
        
         calendarWeekView.baseDelegate = self
+        print("Inside setCal", date, weekday)
         
         // For example only
         if viewModel.currentSelectedData != nil {
             
-            setupCalendarViewWithSelectedData()
+            setupCalendarViewWithSelectedData(date: date)
             return
         }
         // Basic setup
@@ -126,14 +120,14 @@ class DefaultViewController: UIViewController, WeekViewDelegate, EventUpdateDele
     }
     
     /// For example only
-    private func setupCalendarViewWithSelectedData() {
+    private func setupCalendarViewWithSelectedData(date: Date) {
         
         if (!FirstLoad) {
             viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: eventList)
         } else {
             viewModel.eventsByDate = JZWeekViewHelper.getIntraEventsByDate(originalEvents: viewModel.events)
         }
-        let weekday = Calendar.current.component(.weekday, from: Date())
+        let weekday = Calendar.current.component(.weekday, from: date) - 1
         let curdate = matchWeekDayToDate(weekday: weekday)
         guard let selectedData = viewModel.currentSelectedData else { return }
        

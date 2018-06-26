@@ -47,7 +47,6 @@ open class JZColumnHeader: UICollectionReusableView {
         } else if (weekday == 7){
             weekday = 0
         }
-        print("update view: ", weekday, date)
         lblWeekday.text = dateFormatter.shortWeekdaySymbols[weekday].uppercased()
         
         if date.isToday {

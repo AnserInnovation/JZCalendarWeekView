@@ -68,7 +68,6 @@ open class JZWeekViewHelper {
     open class func getIntraEventsByDate<T: JZBaseEvent>(originalEvents: [T]) -> [Date: [T]] {
         var resultEvents = [Date: [T]]()
         for event in originalEvents {
-            print(event.id, event.startDate)
             let startDateStartDay = event.startDate.startOfDay
             // get days from both startOfDay, otherwise 22:00 - 01:00 case will get 0 daysBetween result
             let daysBetween = Date.daysBetween(start: startDateStartDay, end: event.endDate, ignoreHours: true)
