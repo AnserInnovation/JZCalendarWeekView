@@ -1,3 +1,21 @@
+# PetChatzCalenderViewFramerwork
+
+Clone this repository, open PetChatzCalenderView/PetChatzCalenderView.xcodeproj
+
+Select the iOS devices as "Generic iOS Device" and run Product->Build.   The framework will appear in the "Products" folder in your project explorer
+
+Drag the framework from the PetChatzCalenderView project to the PetChatz-iOS project in the PetChatz->Frameworks folder.  
+
+Add the framework to the PetChatz project...  Click the highest level "PetChatz" folder in the project explorer.  Click "Targets" and select the "General" tab.  Scroll down to "Embedded Libraries".  Remove any existing PetChatzCalenderView libraries, then click the + button and add the framework you just dragged in.
+
+# Notes
+The framework will NOT be built for the simulator.  In order to debug with this framework one must use an actual iPhone/iPad
+
+Debug/Release can be modified by Product->Scheme->Edit Scheme.  Select "Run" and switch between release/debug
+
+
+
+
 # JZCalendarWeekView
 
 [![Build Status](https://travis-ci.org/zjfjack/JZCalendarWeekView.svg?branch=master)](https://travis-ci.org/zjfjack/JZCalendarWeekView)
